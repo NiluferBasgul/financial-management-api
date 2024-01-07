@@ -1,6 +1,10 @@
+using financial_management_api.Api.Data;
 using financial_management_api.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"))); // Use the correct key
 
 // Add services to the container.
 builder.Services.AddRazorPages();
