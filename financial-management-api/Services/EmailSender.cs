@@ -1,38 +1,46 @@
-﻿using SendGrid.Helpers.Mail;
+﻿using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
 namespace financial_management_api.Services
 {
-    public class EmailSender : IEmailSender
+    public class EmailSender
     {
         private readonly string _emailFrom;
         private readonly string _password;
-        private readonly ILogger _logger;
+        private readonly ILogger<EmailSender> _logger;
         private readonly EmailSettings _emailSettings;
 
-
-        public EmailSender(string emailFrom, string password)
+        public EmailSender(IOptions<EmailSettings> emailSettings, ILogger<EmailSender> logger)
         {
-            _emailFrom = emailFrom;
-            _password = password;
+            _emailSettings = emailSettings.Value;
+            _emailFrom = _emailSettings.EmailFrom;
+            _password = _emailSettings.Password;
+            _logger = logger;
         }
 
         public void SendEmail(string to, string subject, string body)
         {
-            var message = new MailMessage(_emailFrom, to)
+            try
             {
-                Subject = subject,
-                Body = body
-            };
+                var message = new MailMessage(_emailFrom, to)
+                {
+                    Subject = subject,
+                    Body = body
+                };
 
-            var client = new SmtpClient("smtp.gmail.com", 587)
+                var client = new SmtpClient(_emailSettings.SmtpServer, _emailSettings.SmtpPort)
+                {
+                    Credentials = new NetworkCredential(_emailFrom, _password),
+                    EnableSsl = _emailSettings.EnableSsl
+                };
+
+                client.Send(message);
+            }
+            catch (Exception ex)
             {
-                Credentials = new NetworkCredential(_emailFrom, _password),
-                EnableSsl = true
-            };
-
-            client.Send(message);
+                _logger.LogError($"Failed to send email: {ex.Message}");
+            }
         }
     }
 }

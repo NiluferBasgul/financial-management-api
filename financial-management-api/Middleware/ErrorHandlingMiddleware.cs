@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.IdentityModel.SecurityTokenService;
 using SendGrid.Helpers.Errors.Model;
 using System.Net;
 

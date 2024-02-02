@@ -1,5 +1,4 @@
-﻿using financial_management_api.Api.Data;
-using financial_management_api.Api.DataAccess;
+﻿using financial_management_api.Api.DataAccess;
 using financial_management_api.Api.Models;
 using financial_management_api.Api.Repositories.Interfaces;
 
@@ -9,9 +8,9 @@ namespace financial_management_api.Api.Repositories
     {
         private readonly IDataAccess _dataAccess;
 
-        public BudgetRepository(ApplicationDbContext context)
+        public BudgetRepository(IDataAccess dataAccess)
         {
-            _dataAccess = new DataAccess.DataAccess(context);
+            _dataAccess = dataAccess;
         }
 
         public IEnumerable<Budget> GetAll()
@@ -19,7 +18,7 @@ namespace financial_management_api.Api.Repositories
             return _dataAccess.GetAll<Budget>();
         }
 
-        public Budget GetById(int id)
+        public Budget GetById(Guid id)
         {
             return _dataAccess.GetById<Budget>(id);
         }
@@ -34,7 +33,7 @@ namespace financial_management_api.Api.Repositories
             _dataAccess.Update(entity);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _dataAccess.Delete<Budget>(id);
         }

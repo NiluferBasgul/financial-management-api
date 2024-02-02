@@ -1,7 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore;
-
-namespace financial_management_api.Api.Data
+﻿namespace financial_management_api.Api.Data
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
@@ -18,5 +15,4 @@ namespace financial_management_api.Api.Data
             return new ApplicationDbContext(optionsBuilder.Options, configuration);
         }
     }
-
 }

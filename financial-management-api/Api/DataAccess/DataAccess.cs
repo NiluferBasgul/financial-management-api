@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
 
 namespace financial_management_api.Api.DataAccess
 {
@@ -8,10 +8,10 @@ namespace financial_management_api.Api.DataAccess
 
         public DataAccess(DbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public T GetById<T>(int id) where T : class
+        public T GetById<T>(Guid id) where T : class
         {
             return _context.Set<T>().Find(id);
         }
@@ -33,9 +33,15 @@ namespace financial_management_api.Api.DataAccess
             _context.SaveChanges();
         }
 
-        public void Delete<T>(int id) where T : class
+        public void Delete<T>(Guid id) where T : class
         {
             var entity = _context.Set<T>().Find(id);
+
+            if (entity == null)
+            {
+                return;
+            }
+
             _context.Set<T>().Remove(entity);
             _context.SaveChanges();
         }

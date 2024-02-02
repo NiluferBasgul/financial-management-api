@@ -1,38 +1,34 @@
 using financial_management_api.Api.Data;
 using financial_management_api.Middleware;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection"))); // Use the correct key
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+// Adding Entity Framework DbContext
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+// Middleware and Routing Configuration
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
+// Custom Error Handling Middleware
 app.UseErrorHandlingMiddleware();
 
+// Endpoint Configuration
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
 
-app.MapRazorPages();
-
+// Running the Application
 app.Run();

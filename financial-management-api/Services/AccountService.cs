@@ -1,20 +1,15 @@
-﻿using financial_management_api.Api.Data;
-using financial_management_api.Api.Models;
-using financial_management_api.Api.Repositories;
+﻿using financial_management_api.Api.Models;
 using financial_management_api.Api.Repositories.Interfaces;
 
 namespace financial_management_api.Services
 {
     public class AccountService : ICrudService<Account>
     {
-        // Here, you would inject an IAccountRepository instead of creating a new instance directly.
-        // For simplicity, I'm creating a new instance in the constructor.
         private readonly IAccountRepository _accountRepository;
-        private readonly ApplicationDbContext context;
 
-        public AccountService()
+        public AccountService(IAccountRepository accountRepository)
         {
-            _accountRepository = new AccountRepository(context);
+            _accountRepository = accountRepository;
         }
 
         public IEnumerable<Account> GetAll()
@@ -22,7 +17,7 @@ namespace financial_management_api.Services
             return _accountRepository.GetAll();
         }
 
-        public Account GetById(int id)
+        public Account GetById(Guid id)
         {
             return _accountRepository.GetById(id);
         }
@@ -37,9 +32,10 @@ namespace financial_management_api.Services
             _accountRepository.Update(entity);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _accountRepository.Delete(id);
         }
+
     }
 }

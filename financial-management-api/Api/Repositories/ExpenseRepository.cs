@@ -1,5 +1,4 @@
-﻿using financial_management_api.Api.Data;
-using financial_management_api.Api.DataAccess;
+﻿using financial_management_api.Api.DataAccess;
 using financial_management_api.Api.Models;
 using financial_management_api.Api.Repositories.Interfaces;
 
@@ -9,34 +8,34 @@ namespace financial_management_api.Api.Repositories
     {
         private readonly IDataAccess _dataAccess;
 
-        public ExpenseRepository(ApplicationDbContext context)
+        public ExpenseRepository(IDataAccess dataAccess)
         {
-            _dataAccess = new DataAccess.DataAccess(context);
-        }
-
-        public void Create(Expense entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
+            _dataAccess = dataAccess;
         }
 
         public IEnumerable<Expense> GetAll()
         {
-            throw new NotImplementedException();
+            return _dataAccess.GetAll<Expense>();
         }
 
-        public Expense GetById(int id)
+        public Expense GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return _dataAccess.GetById<Expense>(id);
+        }
+
+        public void Create(Expense entity)
+        {
+            _dataAccess.Create(entity);
         }
 
         public void Update(Expense entity)
         {
-            throw new NotImplementedException();
+            _dataAccess.Update(entity);
+        }
+
+        public void Delete(Guid id)
+        {
+            _dataAccess.Delete<Expense>(id);
         }
     }
 }

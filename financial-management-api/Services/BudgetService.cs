@@ -1,5 +1,4 @@
 ﻿using financial_management_api.Api.Models;
-using financial_management_api.Api.Repositories;
 using financial_management_api.Api.Repositories.Interfaces;
 
 namespace financial_management_api.Services
@@ -7,18 +6,10 @@ namespace financial_management_api.Services
     public class BudgetService : ICrudService<Budget>
     {
         private readonly IBudgetRepository _budgetRepository;
-        private readonly EmailSender _emailSender;
-        private BudgetRepository? budgetRepository;
 
-        public BudgetService(BudgetRepository budgetRepository, EmailSender emailSender)
+        public BudgetService(IBudgetRepository budgetRepository)
         {
             _budgetRepository = budgetRepository;
-            _emailSender = emailSender;
-        }
-
-        public BudgetService(BudgetRepository? budgetRepository)
-        {
-            this.budgetRepository = budgetRepository;
         }
 
         public IEnumerable<Budget> GetAll()
@@ -26,7 +17,7 @@ namespace financial_management_api.Services
             return _budgetRepository.GetAll();
         }
 
-        public Budget GetById(int id)
+        public Budget GetById(Guid id)
         {
             return _budgetRepository.GetById(id);
         }
@@ -41,7 +32,7 @@ namespace financial_management_api.Services
             _budgetRepository.Update(entity);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _budgetRepository.Delete(id);
         }

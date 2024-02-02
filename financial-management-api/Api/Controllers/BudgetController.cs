@@ -1,21 +1,19 @@
 ﻿using financial_management_api.Api.Models;
-using financial_management_api.Api.Repositories;
-using financial_management_api.Api.Repositories.Interfaces;
 using financial_management_api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace financial_management_api.Api.Controllers
+namespace financial_management_api.Api.Controller
 {
     [ApiController]
     [Route("api/[controller]")]
     public class BudgetController : ControllerBase
     {
-        private readonly BudgetService _budgetService;
-        private readonly BudgetRepository _budgetRepository;
+        private readonly ICrudService<Budget> _budgetService;
 
-        public BudgetController()
+        // Use dependency injection to inject the service.
+        public BudgetController(ICrudService<Budget> budgetService)
         {
-            this._budgetService = new BudgetService(_budgetRepository);
+            _budgetService = budgetService;
         }
 
         [HttpGet]
@@ -25,7 +23,7 @@ namespace financial_management_api.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Budget> Get(int id)
+        public ActionResult<Budget> Get(Guid id)
         {
             var budget = _budgetService.GetById(id);
             if (budget == null)
@@ -56,7 +54,7 @@ namespace financial_management_api.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult<Budget> Delete(int id)
+        public ActionResult<Budget> Delete(Guid id)
         {
             var budget = _budgetService.GetById(id);
             if (budget == null)

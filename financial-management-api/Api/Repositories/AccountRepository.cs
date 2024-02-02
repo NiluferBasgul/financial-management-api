@@ -1,5 +1,4 @@
-﻿using financial_management_api.Api.Data;
-using financial_management_api.Api.DataAccess;
+﻿using financial_management_api.Api.DataAccess;
 using financial_management_api.Api.Models;
 using financial_management_api.Api.Repositories.Interfaces;
 
@@ -7,13 +6,11 @@ namespace financial_management_api.Api.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        // Here, you would inject an IDataAccess object instead of creating a new instance directly.
-        // For simplicity, I'm creating a new instance in the constructor.
         private readonly IDataAccess _dataAccess;
 
-        public AccountRepository(ApplicationDbContext context)
+        public AccountRepository(IDataAccess dataAccess)
         {
-            _dataAccess = new DataAccess.DataAccess(context);
+            _dataAccess = dataAccess;
         }
 
         public IEnumerable<Account> GetAll()
@@ -21,7 +18,7 @@ namespace financial_management_api.Api.Repositories
             return _dataAccess.GetAll<Account>();
         }
 
-        public Account GetById(int id)
+        public Account GetById(Guid id)
         {
             return _dataAccess.GetById<Account>(id);
         }
@@ -36,7 +33,7 @@ namespace financial_management_api.Api.Repositories
             _dataAccess.Update(entity);
         }
 
-        public void Delete(int id)
+        public void Delete(Guid id)
         {
             _dataAccess.Delete<Account>(id);
         }

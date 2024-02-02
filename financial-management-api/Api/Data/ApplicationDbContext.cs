@@ -1,18 +1,10 @@
 ﻿using financial_management_api.Api.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace financial_management_api.Api.Data
 {
     public class ApplicationDbContext : DbContext
     {
         private readonly IConfiguration _configuration;
-
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
-        {
-        }
-
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration)
             : base(options)
         {
@@ -76,8 +68,6 @@ namespace financial_management_api.Api.Data
             modelBuilder.Entity<Revenue>()
                 .Property(r => r.Amount)
                 .HasColumnType("decimal(18,2)");
-
-            // Add other configurations...
 
             base.OnModelCreating(modelBuilder);
         }
